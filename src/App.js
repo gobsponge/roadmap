@@ -25,7 +25,7 @@ function App() {
     const sections = ['User experience', 'Developer experience', 'Core protocol', 'ZK L2'];
     const combinedColumns = [];
     
-    // First, collect all items with their section info
+   
     const allItems = sections.flatMap((section, sectionIndex) => {
       return gridItems[section].columns.flatMap((column, columnIndex) => {
         return column.map(item => ({
@@ -37,14 +37,14 @@ function App() {
       });
     });
 
-    // Group items by their progress range
+    
     const progressGroups = {
       completed: allItems.filter(item => item.progress === 100),
       inProgress: allItems.filter(item => item.progress > 0 && item.progress < 100),
       notStarted: allItems.filter(item => item.progress === 0)
     };
 
-    // Create columns based on progress groups
+    
     combinedColumns.push(progressGroups.completed);
     combinedColumns.push(progressGroups.inProgress);
     combinedColumns.push(progressGroups.notStarted);
