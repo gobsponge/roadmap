@@ -299,8 +299,8 @@ function App() {
             progress: 85,
             relations: [{
               targetId: 'Circuit evaluation chiplet',
-              targetAnchor: 'left',
-              sourceAnchor: 'right',
+              targetAnchor: 'middle',
+              sourceAnchor: 'middle',
               style: { 
                 strokeColor: '#94a3b8',
                 strokeWidth: 2,
@@ -309,6 +309,7 @@ function App() {
               }
             }]  
            },
+           
           { name: 'Circuit evaluation chiplet', 
             progress: 30,
             relations: [{
