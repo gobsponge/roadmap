@@ -295,21 +295,173 @@ function App() {
     'ZK L2': {
       columns: [
         [
-          { name: 'Airscript', progress: 85 },
-          { name: 'Circuit evaluation chiplet', progress: 30 },
+          { name: 'Airscript', 
+            progress: 85,
+            relations: [{
+              targetId: 'Circuit evaluation chiplet',
+              targetAnchor: 'left',
+              sourceAnchor: 'right',
+              style: { 
+                strokeColor: '#94a3b8',
+                strokeWidth: 2,
+                arrowLength: 1,
+                arrowThickness: 2
+              }
+            }]  
+           },
+          { name: 'Circuit evaluation chiplet', 
+            progress: 30,
+            relations: [{
+              targetId: 'Recursive proof verification',
+              targetAnchor: 'left',
+              sourceAnchor: 'right',
+              style: { 
+                strokeColor: '#94a3b8',
+                strokeWidth: 2,
+                arrowLength: 1,
+                arrowThickness: 2
+              }
+            }]  
+          },
         ],
         [
-          { name: 'Recursive proof verification', progress: 60 }
+          { name: 'Recursive proof verification', 
+            progress: 60,
+            relations: [{
+              targetId: 'Batch kernel',
+              targetAnchor: 'left',
+              sourceAnchor: 'right',
+              style: { 
+                strokeColor: '#94a3b8',
+                strokeWidth: 2,
+                arrowLength: 1,
+                arrowThickness: 2
+              }
+            },
+            {
+              targetId: 'Efficient Keccak',
+              targetAnchor: 'left',
+              sourceAnchor: 'right',
+              style: { 
+                strokeColor: '#94a3b8',
+                strokeWidth: 2,
+                arrowLength: 1,
+                arrowThickness: 2
+              }
+            }
+          ]  
+          }
         ],
         [
-          { name: 'Batch kernel', progress: 55 },
+          { name: 'Batch kernel', 
+            progress: 55,
+            relations: [{
+              targetId: 'Block kernel',
+              targetAnchor: 'left',
+              sourceAnchor: 'right',
+              style: { 
+                strokeColor: '#94a3b8',
+                strokeWidth: 2,
+                arrowLength: 1,
+                arrowThickness: 2
+              }
+            }] 
+           },
         ],
         [
-          { name: 'Parallel state updates', progress: 40 },
-          { name: 'Distributed provers', progress: 70 },
-          { name: 'CUDA accleration', progress: 90 },
-          { name: 'Block kernel', progress: 50 },
-          { name: 'Efficient Keccak', progress: 20 }
+          { name: 'Parallel state updates', 
+            progress: 40,
+            relations: [{
+              targetId: 'Node performance',
+              targetAnchor: 'left',
+              sourceAnchor: 'right',
+              style: { 
+                strokeColor: '#94a3b8',
+                strokeWidth: 2,
+                arrowLength: 1,
+                arrowThickness: 2
+              }
+            }] 
+           },
+          { name: 'Distributed provers', 
+            progress: 70,
+            relations: [{
+              targetId: 'Node performance',
+              targetAnchor: 'left',
+              sourceAnchor: 'right',
+              style: { 
+                strokeColor: '#94a3b8',
+                strokeWidth: 2,
+                arrowLength: 1,
+                arrowThickness: 2
+              }
+            },
+            {
+              targetId: 'Execution proofs',
+              targetAnchor: 'left',
+              sourceAnchor: 'right',
+              style: { 
+                strokeColor: '#94a3b8',
+                strokeWidth: 2,
+                arrowLength: 1,
+                arrowThickness: 2
+              }
+            }
+          ] 
+          },
+          { name: 'CUDA accleration', 
+            progress: 90,
+            relations: [{
+              targetId: 'Execution proofs',
+              targetAnchor: 'left',
+              sourceAnchor: 'right',
+              style: { 
+                strokeColor: '#94a3b8',
+                strokeWidth: 2,
+                arrowLength: 1,
+                arrowThickness: 2
+              }
+            }]  },
+          { name: 'Block kernel', 
+            progress: 50,
+            relations: [{
+              targetId: 'Execution proofs',
+              targetAnchor: 'left',
+              sourceAnchor: 'right',
+              style: { 
+                strokeColor: '#94a3b8',
+                strokeWidth: 2,
+                arrowLength: 1,
+                arrowThickness: 2
+              }
+            }]
+            },
+          { name: 'Efficient Keccak', 
+            progress: 20,
+            relations: [{
+              targetId: 'AggLayer integration',
+              targetAnchor: 'left',
+              sourceAnchor: 'right',
+              style: { 
+                strokeColor: '#94a3b8',
+                strokeWidth: 2,
+                arrowLength: 1,
+                arrowThickness: 2
+              }
+            },
+            {
+              targetId: 'LxLy-bridge/DA',
+              targetAnchor: 'left',
+              sourceAnchor: 'right',
+              style: { 
+                strokeColor: '#94a3b8',
+                strokeWidth: 2,
+                arrowLength: 1,
+                arrowThickness: 2
+              }
+            }
+            ]
+           }
         ],
         [
           { name: 'Node performance', progress: 0 },
