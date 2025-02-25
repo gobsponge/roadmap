@@ -132,7 +132,7 @@ function App() {
         [
           { name: 'Typescript SDK', 
             progress: 75,
-            description: 'SDK for TypeScript developers to interact with the chain and build applications.',
+            description: 'SDK for TypeScript developers to interact with Miden blockchain and build applications.',
             links: [
               { label: 'GitHub Repository', url: 'https://www.npmjs.com/package/@demox-labs/miden-sdk?activeTab=readme'},
               { label: 'Documentation', url: 'https://0xpolygonmiden.github.io/miden-docs/miden-client/index.html' }
