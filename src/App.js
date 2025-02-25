@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { ArcherContainer, ArcherElement } from 'react-archer';
 import './App.css';
 
 function App() {
   const [selected, setSelected] = useState('User experience');
   const [isOpen, setIsOpen] = useState(false);
+  const [popup, setPopup] = useState({ visible: false, content: '', item: null, position: { x: 0, y: 0 } });
+  const popupRef = useRef(null);
 
   const options = [
     'User experience',
@@ -52,9 +54,54 @@ function App() {
     return { columns: combinedColumns };
   };
 
+  const showPopup = (e, item) => {
+    // Get bounding box of the item
+    const rect = e.currentTarget.getBoundingClientRect();
+    
+    // Calculate position for popup
+    const position = {
+      x: rect.right + 10, // Show popup to the right of the item
+      y: rect.top  // Align with the top of the item
+    };
+    
+    setPopup({
+      visible: true,
+      content: item.description || "No description available",
+      item: item,
+      position: position
+    });
+  };
+
+  const hidePopup = () => {
+    setPopup(prev => ({ ...prev, visible: false }));
+  };  
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (popupRef.current && !popupRef.current.contains(event.target) && 
+          !event.target.classList.contains('box') && 
+          !event.target.classList.contains('box-content')) {
+        hidePopup();
+      }
+    }
+    
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // Close popup when changing sections
+  useEffect(() => {
+    hidePopup();
+  }, [selected]);
+
+
   const renderRoadmapBox = (item) => {
     return (
-      <div className="roadmap-box progress-box">
+      <div className="roadmap-box progress-box"
+        onClick={(e) => showPopup(e, item)}
+      >
         <div 
           className="progress-bar" 
           style={{ width: `${item.progress}%` }}
@@ -79,13 +126,13 @@ function App() {
     );
   };
 
-
   const gridItems = {
     'User experience': {
       columns: [
         [
           { name: 'Typescript SDK', 
             progress: 75,
+            description: 'SDK for TypeScript developers to interact with the platform',
             relations: [{
               targetId: 'Wallet',
               targetAnchor: 'left',
@@ -100,6 +147,7 @@ function App() {
           },
           { name: 'WebGPU proving', 
             progress: 85,
+            description: 'Using WebGPU to accelerate the proving process in browsers',
             relations: [{
               targetId: 'Wallet',
               targetAnchor: 'left',
@@ -114,10 +162,10 @@ function App() {
           }
         ],
         [
-          { name: 'Wallet', progress: 60 },
+          { name: 'Wallet', progress: 60, description: 'User wallet implementation' },
           { name: 'Delegated transaction proving', 
-            progress: 100 },
-          { name: 'Block explorer', progress: 60 }
+            progress: 100, description: 'Allow transactions to be proven by delegated parties' },
+          { name: 'Block explorer', progress: 60, description: 'UI to explore blocks and transactions' }
         ]
       ]
     },
@@ -126,6 +174,7 @@ function App() {
         [
           { name: 'Offset-based storage', 
             progress: 40, 
+            description: 'Storage system using offset-based addressing',
             relations: [{
               targetId: 'Account components',
               targetAnchor: 'left',
@@ -142,6 +191,7 @@ function App() {
         [
           { name: 'Decorator refactoring', 
             progress: 50, 
+            description: 'Refactoring the decorator system for improved usability',
             relations: [{
               targetId: 'Debugging',
               targetAnchor: 'left',
@@ -156,6 +206,7 @@ function App() {
            },
           { name: 'Source code mapping', 
             progress: 0, 
+            description: 'Mapping between compiled code and source code',
             relations: [{
               targetId: 'Debugging',
               targetAnchor: 'left',
@@ -170,6 +221,7 @@ function App() {
         },
           { name: 'Miden SDK', 
             progress: 50, 
+            description: 'Software Development Kit for Miden',
             relations: [{
             targetId: 'Rust compiler',
             targetAnchor: 'left',
@@ -184,6 +236,7 @@ function App() {
         },
           { name: 'Miden Rust bindings', 
             progress: 50,
+            description: 'Rust language bindings for Miden',
             relations: [{
               targetId: 'Rust compiler',
               targetAnchor: 'left',
@@ -198,6 +251,7 @@ function App() {
           },
           { name: 'Element addressable memory', 
             progress: 100, 
+            description: 'Memory addressing at the element level',
             relations: [{
               targetId: 'Rust compiler',
               targetAnchor: 'left',
@@ -212,6 +266,7 @@ function App() {
            },
           { name: 'Read only memory', 
             progress: 15, 
+            description: 'Implementation of read-only memory segments',
             relations: [{
               targetId: 'Rust compiler',
               targetAnchor: 'left',
@@ -226,6 +281,7 @@ function App() {
           },
           { name: 'Account component templates', 
             progress: 90, 
+            description: 'Templates for creating account components',
             relations: [{
               targetId: 'Packaging',
               targetAnchor: 'left',
@@ -240,6 +296,7 @@ function App() {
            },
           { name: 'Account components', 
             progress: 100, 
+            description: 'Component system for accounts',
             relations: [{
               targetId: 'Packaging',
               targetAnchor: 'left',
@@ -254,6 +311,7 @@ function App() {
            },
           { name: 'Efficient ECDSA signatures', 
             progress: 0,
+            description: 'Optimized implementation of ECDSA signature verification',
             relations: [{
               targetId: 'Oracles',
               targetAnchor: 'left',
@@ -268,20 +326,20 @@ function App() {
           }
         ],
         [
-          { name: 'Developer playground', progress: 40 },
-          { name: 'Debugging', progress: 0 },
-          { name: 'Rust compiler', progress: 60 },
-          { name: 'Packaging', progress: 80 },
-          { name: 'Rate limits', progress: 0 },
-          { name: 'Oracles', progress: 25 }
+          { name: 'Developer playground', progress: 40, description: 'Interactive environment for developers' },
+          { name: 'Debugging', progress: 0, description: 'Tools and infrastructure for debugging' },
+          { name: 'Rust compiler', progress: 60, description: 'Compiler support for Rust language' },
+          { name: 'Packaging', progress: 80, description: 'System for packaging components' },
+          { name: 'Rate limits', progress: 0, description: 'Implementation of rate limiting' },
+          { name: 'Oracles', progress: 25, description: 'Oracle system for external data' }
         ]
       ]
     },
     'Core protocol': {
       columns: [
         [
-          { name: 'Transaction recency conditions', progress: 100 },
-          { name: 'Foreigh procedure invocation', progress: 100 },
+          { name: 'Transaction recency conditions', progress: 100, description: 'Conditions to ensure transaction recency'},
+          { name: 'Foreigh procedure invocation', progress: 100, description: 'System for invoking foreign procedures' },
         ],
         [
           { name: 'Computing deltas in kernel', progress: 0 },
@@ -483,7 +541,9 @@ function App() {
         id={item.name}
         relations={relations}
       >
-        <div className="box progress-box">
+        <div className="box progress-box"
+          onClick={(e) => showPopup(e, item)}
+        >
           <div 
             className="progress-bar" 
             style={{ width: `${item.progress}%` }}
@@ -491,6 +551,33 @@ function App() {
           <span className="box-content">{item.name}</span>
         </div>
       </ArcherElement>
+    );
+  };
+
+  const renderPopup = () => {
+    if (!popup.visible) return null;
+
+    const item = popup.item;
+    if (!item) return null;
+
+    return (
+      <div 
+        ref={popupRef}
+        className="popup"
+        style={{
+          position: 'absolute',
+          left: popup.position.x + 'px',
+          top: popup.position.y + 'px'
+        }}
+      >
+        <div className="popup-header">
+          <h3>{item.name}</h3>
+          <button className="close-button" onClick={hidePopup}>×</button>
+        </div>
+        <div className="popup-content">
+          <p className="description">{item.description || "No description available"}</p>
+        </div>
+      </div>
     );
   };
 
@@ -551,6 +638,8 @@ function App() {
           ))}
         </div>
       </ArcherContainer>
+
+      {renderPopup()}
     </div>
   );
 }

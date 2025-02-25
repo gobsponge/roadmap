@@ -48,7 +48,6 @@
   box-shadow: 0 0 0 3px rgba(147, 197, 253, 0.25);
 }
 
-
 .chevron {
   position: absolute;
   right: 0;
@@ -135,7 +134,6 @@
   min-width: 180px; /* Added to maintain consistent column width */
 }
 
-
 .box {
   background: white;
   padding: 12px;
@@ -154,6 +152,7 @@
   width: 140px;
   position: relative;
   z-index: 2;
+  cursor: pointer;
 }
 
 .box:hover {
@@ -177,8 +176,162 @@
   z-index: 1;
 }
 
-
 .box-content {
   position: relative;
   z-index: 2;
+}
+
+/* Popup Styles */
+.popup {
+  width: 300px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2),
+              0 10px 10px -5px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  z-index: 1000;
+  animation: popupFadeIn 0.3s ease-out;
+  border: 1px solid #e2e8f0;
+  position: relative;
+}
+
+@keyframes popupFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background-color: #bad7f2;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.popup-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  font-weight: bold;
+  color: #64748b;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.close-button:hover {
+  background-color: #e2e8f0;
+  color: #334155;
+}
+
+.popup-content {
+  padding: 16px;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  animation: overlayFadeIn 0.3s ease-out;
+}
+
+.popup:after {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 20px;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid #bad7f2;
+  display: block;
+}
+
+.popup-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 0 20px 20px 20px;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 15px;
+}
+
+.popup-button {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.popup-button.primary {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.popup-button.primary:hover {
+  background-color: #2563eb;
+}
+
+.popup-button.secondary {
+  background-color: #f1f5f9;
+  color: #334155;
+  border-color: #e2e8f0;
+}
+
+.popup-button.secondary:hover {
+  background-color: #e2e8f0;
+}
+
+/* Add overlay for modal effect */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  animation: overlayFadeIn 0.3s ease-out;
+}
+
+
+
+
+.description {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #334155;
 }
