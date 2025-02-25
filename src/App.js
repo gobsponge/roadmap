@@ -168,8 +168,8 @@ function App() {
         [
           { name: 'Wallet', progress: 60, description: 'User wallet implementation' },
           { name: 'Delegated transaction proving', 
-            progress: 100, description: 'Allow transactions to be proven by delegated parties' },
-          { name: 'Block explorer', progress: 60, description: 'UI to explore blocks and transactions' }
+            progress: 100, description: 'Allow transactions to be proven by delegated parties for high throughput' },
+          { name: 'Block explorer', progress: 60, description: 'Explore blocks and transactions on the chain' }
         ]
       ]
     },
@@ -178,7 +178,6 @@ function App() {
         [
           { name: 'Offset-based storage', 
             progress: 40, 
-            description: 'Storage system using offset-based addressing',
             relations: [{
               targetId: 'Account components',
               targetAnchor: 'left',
@@ -195,7 +194,6 @@ function App() {
         [
           { name: 'Decorator refactoring', 
             progress: 50, 
-            description: 'Refactoring the decorator system for improved usability',
             relations: [{
               targetId: 'Debugging',
               targetAnchor: 'left',
@@ -210,7 +208,6 @@ function App() {
            },
           { name: 'Source code mapping', 
             progress: 0, 
-            description: 'Mapping between compiled code and source code',
             relations: [{
               targetId: 'Debugging',
               targetAnchor: 'left',
@@ -225,7 +222,6 @@ function App() {
         },
           { name: 'Miden SDK', 
             progress: 50, 
-            description: 'Software Development Kit for Miden',
             relations: [{
             targetId: 'Rust compiler',
             targetAnchor: 'left',
@@ -240,7 +236,6 @@ function App() {
         },
           { name: 'Miden Rust bindings', 
             progress: 50,
-            description: 'Rust language bindings for Miden',
             relations: [{
               targetId: 'Rust compiler',
               targetAnchor: 'left',
@@ -255,7 +250,6 @@ function App() {
           },
           { name: 'Element addressable memory', 
             progress: 100, 
-            description: 'Memory addressing at the element level',
             relations: [{
               targetId: 'Rust compiler',
               targetAnchor: 'left',
@@ -269,8 +263,7 @@ function App() {
             }]   
            },
           { name: 'Read only memory', 
-            progress: 15, 
-            description: 'Implementation of read-only memory segments',
+            progress: 15,
             relations: [{
               targetId: 'Rust compiler',
               targetAnchor: 'left',
@@ -285,7 +278,6 @@ function App() {
           },
           { name: 'Account component templates', 
             progress: 90, 
-            description: 'Templates for creating account components',
             relations: [{
               targetId: 'Packaging',
               targetAnchor: 'left',
@@ -300,7 +292,6 @@ function App() {
            },
           { name: 'Account components', 
             progress: 100, 
-            description: 'Component system for accounts',
             relations: [{
               targetId: 'Packaging',
               targetAnchor: 'left',
@@ -315,7 +306,6 @@ function App() {
            },
           { name: 'Efficient ECDSA signatures', 
             progress: 0,
-            description: 'Optimized implementation of ECDSA signature verification',
             relations: [{
               targetId: 'Oracles',
               targetAnchor: 'left',
@@ -330,20 +320,20 @@ function App() {
           }
         ],
         [
-          { name: 'Developer playground', progress: 40, description: 'Interactive environment for developers' },
-          { name: 'Debugging', progress: 0, description: 'Tools and infrastructure for debugging' },
-          { name: 'Rust compiler', progress: 60, description: 'Compiler support for Rust language' },
-          { name: 'Packaging', progress: 80, description: 'System for packaging components' },
-          { name: 'Rate limits', progress: 0, description: 'Implementation of rate limiting' },
-          { name: 'Oracles', progress: 25, description: 'Oracle system for external data' }
+          { name: 'Developer playground', progress: 40 },
+          { name: 'Debugging', progress: 0 },
+          { name: 'Rust compiler', progress: 60},
+          { name: 'Packaging', progress: 80},
+          { name: 'Rate limits', progress: 0},
+          { name: 'Oracles', progress: 25}
         ]
       ]
     },
     'Core protocol': {
       columns: [
         [
-          { name: 'Transaction recency conditions', progress: 100, description: 'Conditions to ensure transaction recency'},
-          { name: 'Foreigh procedure invocation', progress: 100, description: 'System for invoking foreign procedures' },
+          { name: 'Transaction recency conditions', progress: 100},
+          { name: 'Foreign procedure invocation', progress: 100},
         ],
         [
           { name: 'Computing deltas in kernel', progress: 0 },
