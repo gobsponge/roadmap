@@ -524,10 +524,350 @@ function App() {
           { name: 'LxLy-bridge/DA', progress: 0 }
         ]
       ]
+    },
+    'Full roadmap': {
+      // Refactored to include rows
+      rows: [
+        // Row 1: User Experience
+        {
+          title: 'User Experience',
+          columns: [
+            [
+              { name: 'Typescript SDK', 
+                progress: 75,
+                description: 'SDK for TypeScript developers to interact with and build applications on Miden blockchain.',
+                links: [
+                  { label: 'GitHub Repository', url: 'https://www.npmjs.com/package/@demox-labs/miden-sdk?activeTab=readme'},
+                  { label: 'Documentation', url: 'https://0xpolygonmiden.github.io/miden-docs/miden-client/index.html' }
+                ],
+                relations: [{
+                  targetId: 'Wallet',
+                  targetAnchor: 'left',
+                  sourceAnchor: 'right',
+                  style: { 
+                    strokeColor: '#94a3b8',
+                    strokeWidth: 2,
+                    arrowLength: 8,
+                    arrowThickness: 2
+                  }
+                }],
+              },
+              { name: 'WebGPU proving', 
+                progress: 85,
+                description: 'Using WebGPU to accelerate the proving process in browsers',
+                relations: [{
+                  targetId: 'Wallet',
+                  targetAnchor: 'left',
+                  sourceAnchor: 'right',
+                  style: { 
+                    strokeColor: '#94a3b8',
+                    strokeWidth: 2,
+                    arrowLength: 8,
+                    arrowThickness: 2
+                  }
+                }] 
+              }
+            ],
+            [
+              { name: 'Wallet', progress: 60, description: 'User wallet implementation' },
+              { name: 'Delegated transaction proving', 
+                progress: 100, description: 'Allow transactions to be proven by delegated parties for high throughput' },
+              { name: 'Block explorer', progress: 60, description: 'Explore blocks and transactions on the chain' }
+            ]
+          ]
+        },
+        // Row 2: Developer Experience
+        {
+          title: 'Developer Experience',
+          columns: [
+            [
+              { name: 'Offset-based storage', progress: 40, 
+                relations: [{
+                  targetId: 'Account components',
+                  targetAnchor: 'left',
+                  sourceAnchor: 'right',
+                  style: { 
+                    strokeColor: '#94a3b8',
+                    strokeWidth: 2,
+                    arrowLength: 8,
+                    arrowThickness: 2
+                  }
+                }] 
+               },
+            ],
+            [
+              { name: 'Decorator refactoring', progress: 50,
+                relations: [{
+                  targetId: 'Debugging',
+                  targetAnchor: 'left',
+                  sourceAnchor: 'right',
+                  style: { 
+                    strokeColor: '#94a3b8',
+                    strokeWidth: 2,
+                    arrowLength: 8,
+                    arrowThickness: 2
+                  }
+                }] 
+               },
+              { name: 'Source code mapping', progress: 0,
+                relations: [{
+                  targetId: 'Debugging',
+                  targetAnchor: 'left',
+                  sourceAnchor: 'right',
+                  style: { 
+                    strokeColor: '#94a3b8',
+                    strokeWidth: 2,
+                    arrowLength: 8,
+                    arrowThickness: 2
+                  }
+                }] 
+               },
+              { name: 'Miden SDK', progress: 50, 
+                relations: [{
+                  targetId: 'Rust compiler',
+                  targetAnchor: 'left',
+                  sourceAnchor: 'right',
+                  style: { 
+                    strokeColor: '#94a3b8',
+                    strokeWidth: 2,
+                    arrowLength: 8,
+                    arrowThickness: 2
+                  }
+                }] 
+               },
+              { name: 'Miden Rust bindings', progress: 50,
+                relations: [{
+                  targetId: 'Rust compiler',
+                  targetAnchor: 'left',
+                  sourceAnchor: 'right',
+                  style: { 
+                    strokeColor: '#94a3b8',
+                    strokeWidth: 2,
+                    arrowLength: 8,
+                    arrowThickness: 2
+                  }
+                }] 
+               },
+               { name: 'Element addressable memory', progress: 100, 
+                relations: [{
+                  targetId: 'Rust compiler',
+                  targetAnchor: 'left',
+                  sourceAnchor: 'right',
+                  style: { 
+                    strokeColor: '#94a3b8',
+                    strokeWidth: 2,
+                    arrowLength: 8,
+                    arrowThickness: 2
+                  }
+                }] 
+               },
+              { name: 'Read only memory', progress: 15, 
+                relations: [{
+                  targetId: 'Rust compiler',
+                  targetAnchor: 'left',
+                  sourceAnchor: 'right',
+                  style: { 
+                    strokeColor: '#94a3b8',
+                    strokeWidth: 2,
+                    arrowLength: 8,
+                    arrowThickness: 2
+                  }
+                }] 
+               },
+              { name: 'Account component templates', progress: 90,
+                relations: [{
+                  targetId: 'Packaging',
+                  targetAnchor: 'left',
+                  sourceAnchor: 'right',
+                  style: { 
+                    strokeColor: '#94a3b8',
+                    strokeWidth: 2,
+                    arrowLength: 8,
+                    arrowThickness: 2
+                  }
+                }] 
+               },
+              { name: 'Account components', progress: 100, 
+                relations: [{
+                  targetId: 'Packaging',
+                  targetAnchor: 'left',
+                  sourceAnchor: 'right',
+                  style: { 
+                    strokeColor: '#94a3b8',
+                    strokeWidth: 2,
+                    arrowLength: 8,
+                    arrowThickness: 2
+                  }
+                }] 
+               },
+              { name: 'Efficient ECDSA signatures', progress: 0 }
+            ],
+            [
+              { name: 'Developer playground', progress: 40 },
+              { name: 'Debugging', progress: 0 },
+              { name: 'Rust compiler', progress: 60},
+              { name: 'Packaging', progress: 80},
+              { name: 'Rate limits', progress: 0},
+              { name: 'Oracles', progress: 25}
+            ]
+          ]
+        },
+        // Row 3: Core Protocol
+        {
+          title: 'Core Protocol',
+          columns: [
+            [
+              { name: 'Transaction recency conditions', progress: 100, 
+                relations: [{
+                  targetId: 'Rate limits',
+                  targetAnchor: 'left',
+                  sourceAnchor: 'right',
+                  style: { 
+                    strokeColor: '#94a3b8',
+                    strokeWidth: 2,
+                    arrowLength: 8,
+                    arrowThickness: 2
+                  }
+                }, 
+                {
+                  targetId: 'Oracles',
+                  targetAnchor: 'left',
+                  sourceAnchor: 'right',
+                  style: { 
+                    strokeColor: '#94a3b8',
+                    strokeWidth: 2,
+                    arrowLength: 8,
+                    arrowThickness: 2
+                  }
+                }] 
+              },
+              { name: 'Foreign procedure invocation', progress: 100, 
+                relations: [
+                  {
+                    targetId: 'Oracles',
+                    targetAnchor: 'left',
+                    sourceAnchor: 'right',
+                    style: { 
+                      strokeColor: '#94a3b8',
+                      strokeWidth: 2,
+                      arrowLength: 8,
+                      arrowThickness: 2
+                    }
+                  }
+                ]
+              },
+            ],
+            [
+              { name: 'Computing deltas in kernel', progress: 0 },
+              { name: 'Storage arrays', progress: 0 },
+              { name: 'Account-ID size', progress: 100 },
+              { name: 'Fees', progress: 15 },
+              { name: 'STARK-based signatures', progress: 70 }
+            ]
+          ]
+        },
+        // Row 4: ZK L2
+        {
+          title: 'ZK L2',
+          columns: [
+            [
+              { name: 'Airscript', progress: 85 },
+              { name: 'Circuit evaluation chiplet', progress: 30,
+                relations: [
+                  {
+                    targetId: 'Recursive proof verification',
+                    targetAnchor: 'left',
+                    sourceAnchor: 'right',
+                    style: { 
+                      strokeColor: '#94a3b8',
+                      strokeWidth: 2,
+                      arrowLength: 8,
+                      arrowThickness: 2
+                    }
+                  }
+                ]
+               }
+            ],
+            [
+              { name: 'Recursive proof verification', progress: 60, 
+                relations: [
+                  {
+                    targetId: 'Batch kernel',
+                    targetAnchor: 'left',
+                    sourceAnchor: 'right',
+                    style: { 
+                      strokeColor: '#94a3b8',
+                      strokeWidth: 2,
+                      arrowLength: 8,
+                      arrowThickness: 2
+                    }
+                  }
+                ]
+               }
+            ],
+            [
+              { name: 'Batch kernel', progress: 55 }
+            ],
+            [
+              { name: 'Parallel state updates', progress: 40 },
+              { name: 'Distributed provers', progress: 70 },
+              { name: 'CUDA accleration', progress: 90 },
+              { name: 'Block kernel', progress: 50 },
+              { name: 'Efficient Keccak', progress: 20 }
+            ],
+            [
+              { name: 'Node performance', progress: 0 },
+              { name: 'Execution proofs', progress: 0 },
+              { name: 'Network transactions', progress: 0 },
+              { name: 'AggLayer integration', progress: 0 },
+              { name: 'LxLy-bridge/DA', progress: 0 }
+            ]
+          ]
+        }
+      ],
+      // Keep the original columns for compatibility with other code
+      columns: [
+        [
+          { name: 'Airscript', progress: 85 },
+          { name: 'Circuit evaluation chiplet', progress: 30, 
+            relations: [{
+              targetId: 'Debugging',
+              targetAnchor: 'left',
+              sourceAnchor: 'right',
+              style: { 
+                strokeColor: '#94a3b8',
+                strokeWidth: 2,
+                arrowLength: 8,
+                arrowThickness: 2
+              }
+            }] 
+           },
+        ],
+        [
+          { name: 'Recursive proof verification', progress: 60 }
+        ],
+        [
+          { name: 'Batch kernel', progress: 55 },
+        ],
+        [
+          { name: 'Parallel state updates', progress: 40 },
+          { name: 'Distributed provers', progress: 70 },
+          { name: 'CUDA accleration', progress: 90 },
+          { name: 'Block kernel', progress: 50 },
+          { name: 'Efficient Keccak', progress: 20 }
+        ],
+        [
+          { name: 'Node performance', progress: 0 },
+          { name: 'Execution proofs', progress: 0 },
+          { name: 'Network transactions', progress: 0 },
+          { name: 'AggLayer integration', progress: 0 },
+          { name: 'LxLy-bridge/DA', progress: 0 }
+        ]
+      ]
     }
   };
 
-  gridItems['Full roadmap'] = combineRoadmapItems();
+  
   
   const renderBox = (item, relations = []) => {
     return (
@@ -639,17 +979,40 @@ function App() {
       </div>
 
       <ArcherContainer strokeColor="#94a3b8">
-        <div className={`grid ${selected === 'Developer experience' ? 'three-columns' : ''}`}>
-          {gridItems[selected].columns.map((column, columnIndex) => (
-            <div key={columnIndex} className="column">
-              {column.map((item, itemIndex) => (
-                <div key={itemIndex}>
-                  {renderBox(item, item.relations || [])}
+        {selected === 'Full roadmap' ? (
+          <div className="full-roadmap">
+            {gridItems[selected].rows.map((row, rowIndex) => (
+              <div key={rowIndex} className="roadmap-row">
+                <div className="row-header">
+                  <h2 className="row-title">{row.title}</h2>
                 </div>
-              ))}
-            </div>
-          ))}
-        </div>
+                <div className={`grid ${row.title === 'Developer Experience' ? 'four-columns' : ''}`}>
+                  {row.columns.map((column, columnIndex) => (
+                    <div key={columnIndex} className="column">
+                      {column.map((item, itemIndex) => (
+                        <div key={itemIndex}>
+                          {renderBox(item, item.relations || [])}
+                        </div>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className={`grid ${selected === 'Developer experience' ? 'three-columns' : ''}`}>
+            {gridItems[selected].columns.map((column, columnIndex) => (
+              <div key={columnIndex} className="column">
+                {column.map((item, itemIndex) => (
+                  <div key={itemIndex}>
+                    {renderBox(item, item.relations || [])}
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        )}
       </ArcherContainer>
 
       {renderPopup()}
