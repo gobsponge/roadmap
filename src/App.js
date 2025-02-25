@@ -55,13 +55,13 @@ function App() {
   };
 
   const showPopup = (e, item) => {
-    // Get bounding box of the item
+    
     const rect = e.currentTarget.getBoundingClientRect();
     
-    // Calculate position for popup
+    
     const position = {
-      x: rect.right + 10, // Show popup to the right of the item
-      y: rect.top  // Align with the top of the item
+      x: rect.right + 10,
+      y: rect.top 
     };
     
     setPopup({
@@ -91,7 +91,7 @@ function App() {
     };
   }, []);
 
-  // Close popup when changing sections
+  
   useEffect(() => {
     hidePopup();
   }, [selected]);
@@ -132,7 +132,11 @@ function App() {
         [
           { name: 'Typescript SDK', 
             progress: 75,
-            description: 'SDK for TypeScript developers to interact with the platform',
+            description: 'SDK for TypeScript developers to interact with the platform.',
+            links: [
+              { label: 'GitHub Repository', url: 'https://www.npmjs.com/package/@demox-labs/miden-sdk?activeTab=readme'},
+              { label: 'Documentation', url: 'https://0xpolygonmiden.github.io/miden-docs/miden-client/index.html' }
+            ],
             relations: [{
               targetId: 'Wallet',
               targetAnchor: 'left',
@@ -576,6 +580,25 @@ function App() {
         </div>
         <div className="popup-content">
           <p className="description">{item.description || "No description available"}</p>
+          {item.links && item.links.length > 0 && (
+            <div className="popup-links">
+              <h4 className="links-title">Related Links</h4>
+              <ul className="links-list">
+                {item.links.map((link, index) => (
+                  <li key={index} className="link-item">
+                    <a 
+                      href={link.url} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="popup-link"
+                    >
+                      {link.label || link.url}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </div>
     );
