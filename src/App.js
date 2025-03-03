@@ -5,15 +5,12 @@ import "./App.css";
 function App() {
   const [selected, setSelected] = useState("User experience");
   const [isOpen, setIsOpen] = useState(false);
-  const [popup, setPopup] = useState({
-    visible: false,
-    content: "",
-    item: null,
-    position: { x: 0, y: 0 },
-  });
-  const [zoomLevel, setZoomLevel] = useState(1);
-  const popupRef = useRef(null);
+  // Default sidebar to have no item selected initially
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [connectedBoxes, setConnectedBoxes] = useState([]);
+
   const contentRef = useRef(null);
+  const archerContainerRef = useRef(null);
 
   const options = [
     "User experience",
@@ -23,16 +20,67 @@ function App() {
     "Full roadmap",
   ];
 
-  const zoomIn = () => {
-    setZoomLevel((prevZoom) => Math.min(prevZoom + 0.1, 2.0));
-  };
+  const findConnectedBoxes = (itemName) => {
+    if (!itemName) return [];
 
-  const zoomOut = () => {
-    setZoomLevel((prevZoom) => Math.max(prevZoom - 0.1, 0.5));
-  };
+    const connected = new Set();
 
-  const resetZoom = () => {
-    setZoomLevel(1);
+    // Helper function to search through all sections and columns
+    const searchConnections = () => {
+      // Check all sections
+      Object.values(gridItems).forEach((section) => {
+        // For regular views with columns
+        if (section.columns) {
+          section.columns.forEach((column) => {
+            column.forEach((item) => {
+              // Check if this item targets our selected box
+              if (item.relations) {
+                item.relations.forEach((relation) => {
+                  if (relation.targetId === itemName) {
+                    connected.add(item.name); // This item targets our selected box
+                  }
+                });
+              }
+
+              // Check if our selected box has this item as a target
+              if (item.name === itemName && item.relations) {
+                item.relations.forEach((relation) => {
+                  connected.add(relation.targetId); // Our selected box targets this item
+                });
+              }
+            });
+          });
+        }
+
+        // For Full roadmap with rows
+        if (section.rows) {
+          section.rows.forEach((row) => {
+            row.columns.forEach((column) => {
+              column.forEach((item) => {
+                // Check if this item targets our selected box
+                if (item.relations) {
+                  item.relations.forEach((relation) => {
+                    if (relation.targetId === itemName) {
+                      connected.add(item.name);
+                    }
+                  });
+                }
+
+                // Check if our selected box has this item as a target
+                if (item.name === itemName && item.relations) {
+                  item.relations.forEach((relation) => {
+                    connected.add(relation.targetId);
+                  });
+                }
+              });
+            });
+          });
+        }
+      });
+    };
+
+    searchConnections();
+    return Array.from(connected);
   };
 
   const calculateAverageProgress = (items) => {
@@ -76,60 +124,18 @@ function App() {
     return { columns: combinedColumns };
   };
 
-  const showPopup = (e, item) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-
-    const position = {
-      x: rect.right + 10,
-      y: rect.top,
-    };
-
-    setPopup({
-      visible: true,
-      content: item.description || "No description available",
-      item: item,
-      position: position,
-    });
-  };
-
-  const hidePopup = () => {
-    setPopup((prev) => ({ ...prev, visible: false }));
-  };
-
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (
-        popupRef.current &&
-        !popupRef.current.contains(event.target) &&
-        !event.target.classList.contains("box") &&
-        !event.target.classList.contains("box-content")
-      ) {
-        hidePopup();
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  useEffect(() => {
-    hidePopup();
-  }, [selected]);
-
   const renderRoadmapBox = (item) => {
     return (
-      <div
-        className="roadmap-box progress-box"
-        onClick={(e) => showPopup(e, item)}
-      >
+      <div className="roadmap-box progress-box">
         <div
           className="progress-bar"
           style={{ width: `${item.progress}%` }}
         ></div>
         <div className="roadmap-content">
-          <span className="box-title">{item.name}</span>
+          <div className="box-content-wrapper">
+            <span className="box-title">{item.name}</span>
+            <span className="progress-indicator">{item.progress}%</span>
+          </div>
           <div className="sub-items">
             {item.items.map((subItem, index) => (
               <div key={index} className="sub-item">
@@ -522,7 +528,7 @@ function App() {
                 style: {
                   strokeColor: "#94a3b8",
                   strokeWidth: 2,
-                  arrowLength: 1,
+                  arrowLength: 8,
                   arrowThickness: 2,
                 },
               },
@@ -539,7 +545,7 @@ function App() {
                 style: {
                   strokeColor: "#94a3b8",
                   strokeWidth: 2,
-                  arrowLength: 1,
+                  arrowLength: 8,
                   arrowThickness: 2,
                 },
               },
@@ -550,7 +556,7 @@ function App() {
                 style: {
                   strokeColor: "#94a3b8",
                   strokeWidth: 2,
-                  arrowLength: 1,
+                  arrowLength: 81,
                   arrowThickness: 2,
                 },
               },
@@ -601,7 +607,7 @@ function App() {
                 style: {
                   strokeColor: "#94a3b8",
                   strokeWidth: 2,
-                  arrowLength: 1,
+                  arrowLength: 8,
                   arrowThickness: 2,
                 },
               },
@@ -612,7 +618,7 @@ function App() {
                 style: {
                   strokeColor: "#94a3b8",
                   strokeWidth: 2,
-                  arrowLength: 1,
+                  arrowLength: 8,
                   arrowThickness: 2,
                 },
               },
@@ -942,7 +948,23 @@ function App() {
           title: "ZK L2",
           columns: [
             [
-              { name: "Airscript", progress: 85 },
+              {
+                name: "Airscript",
+                progress: 85,
+                relations: [
+                  {
+                    targetId: "Circuit evaluation chiplet",
+                    targetAnchor: "middle",
+                    sourceAnchor: "middle",
+                    style: {
+                      strokeColor: "#94a3b8",
+                      strokeWidth: 2,
+                      arrowLength: 8,
+                      arrowThickness: 2,
+                    },
+                  },
+                ],
+              },
               {
                 name: "Circuit evaluation chiplet",
                 progress: 30,
@@ -1034,8 +1056,8 @@ function App() {
             ],
             [
               {
-                name: "Parallel state updates",
-                progress: 40,
+                name: "Foreign procedure invocation",
+                progress: 100,
                 relations: [
                   {
                     targetId: "Node performance",
@@ -1154,7 +1176,23 @@ function App() {
       // Keep the original columns for compatibility with other code
       columns: [
         [
-          { name: "Airscript", progress: 85 },
+          {
+            name: "Airscript",
+            progress: 85,
+            relations: [
+              {
+                targetId: "Circuit evaluation chiplet",
+                targetAnchor: "middle",
+                sourceAnchor: "middle",
+                style: {
+                  strokeColor: "#94a3b8",
+                  strokeWidth: 2,
+                  arrowLength: 8,
+                  arrowThickness: 2,
+                },
+              },
+            ],
+          },
           {
             name: "Circuit evaluation chiplet",
             progress: 30,
@@ -1176,11 +1214,43 @@ function App() {
         [{ name: "Recursive proof verification", progress: 60 }],
         [{ name: "Batch kernel", progress: 55 }],
         [
-          { name: "Parallel state updates", progress: 40 },
+          {
+            name: "Parallel state updates",
+            progress: 40,
+            relations: [
+              {
+                targetId: "Node performance",
+                targetAnchor: "left",
+                sourceAnchor: "right",
+                style: {
+                  strokeColor: "#94a3b8",
+                  strokeWidth: 2,
+                  arrowLength: 8,
+                  arrowThickness: 2,
+                },
+              },
+            ],
+          },
           { name: "Distributed provers", progress: 70 },
           { name: "CUDA accleration", progress: 90 },
           { name: "Block kernel", progress: 50 },
-          { name: "Efficient Keccak", progress: 20 },
+          {
+            name: "Efficient Keccak",
+            progress: 20,
+            elations: [
+              {
+                targetId: "LxLy-bridge/DA",
+                targetAnchor: "left",
+                sourceAnchor: "right",
+                style: {
+                  strokeColor: "#94a3b8",
+                  strokeWidth: 2,
+                  arrowLength: 8,
+                  arrowThickness: 2,
+                },
+              },
+            ],
+          },
         ],
         [
           { name: "Node performance", progress: 0 },
@@ -1193,153 +1263,269 @@ function App() {
     },
   };
 
+  const handleBoxClick = (item) => {
+    if (selectedItem && selectedItem.name === item.name) {
+      setSelectedItem(null);
+      setConnectedBoxes([]);
+    } else {
+      setSelectedItem(item);
+      setConnectedBoxes(findConnectedBoxes(item.name));
+    }
+
+    setTimeout(() => {
+      if (
+        archerContainerRef.current &&
+        archerContainerRef.current.refreshScreen
+      ) {
+        archerContainerRef.current.refreshScreen();
+      }
+    }, 50);
+  };
+
+  useEffect(() => {
+    setSelectedItem(null);
+    setConnectedBoxes([]);
+  }, [selected]);
+
   const renderBox = (item, relations = []) => {
+    const isSelected = selectedItem && selectedItem.name === item.name;
+    const isConnected = connectedBoxes.includes(item.name);
+    const shouldFade = selectedItem && !isSelected && !isConnected;
+
+    const styledRelations = relations.map((relation) => {
+      if (
+        (selectedItem && selectedItem.name === item.name) ||
+        (selectedItem && selectedItem.name === relation.targetId)
+      ) {
+        return {
+          ...relation,
+          style: {
+            ...relation.style,
+            strokeColor: "#3b82f6",
+            strokeWidth: 3,
+            className: "focused-connection",
+          },
+        };
+      }
+      return relation;
+    });
+
     return (
-      <ArcherElement id={item.name} relations={relations}>
-        <div className="box progress-box" onClick={(e) => showPopup(e, item)}>
+      <ArcherElement id={item.name} relations={styledRelations}>
+        <div
+          className={`box progress-box ${isSelected ? "selected" : ""} ${isConnected ? "connected" : ""} ${shouldFade ? "faded" : ""}`}
+          onClick={() => handleBoxClick(item)}
+        >
           <div
             className="progress-bar"
             style={{ width: `${item.progress}%` }}
           ></div>
-          <span className="box-content">{item.name}</span>
+          <div className="box-content-wrapper">
+            <span className="box-content">{item.name}</span>
+          </div>
         </div>
       </ArcherElement>
     );
   };
 
-  const renderPopup = () => {
-    if (!popup.visible) return null;
-
-    const item = popup.item;
-    if (!item) return null;
-
+  const renderSidebar = () => {
     return (
-      <div
-        ref={popupRef}
-        className="popup"
-        style={{
-          position: "absolute",
-          left: popup.position.x + "px",
-          top: popup.position.y + "px",
-        }}
-      >
-        <div className="popup-header">
-          <h3>{item.name}</h3>
-          <button className="close-button" onClick={hidePopup}>
-            ×
-          </button>
+      <aside className="permanent-sidebar">
+        <div className="sidebar-header">
+          <h2>{selectedItem ? selectedItem.name : "Select an item"}</h2>
         </div>
-        <div className="popup-content">
-          <p className="description">
-            {item.description || "No description available"}
-          </p>
-          {item.links && item.links.length > 0 && (
-            <div className="popup-links">
-              <h4 className="links-title">Related Links</h4>
-              <ul className="links-list">
-                {item.links.map((link, index) => (
-                  <li key={index} className="link-item">
-                    <a
-                      href={link.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="popup-link"
-                    >
-                      {link.label || link.url}
-                    </a>
-                  </li>
-                ))}
-              </ul>
+
+        <div className="sidebar-content">
+          {selectedItem ? (
+            // Content when an item is selected
+            <>
+              <div className="progress-indicator">
+                <div className="progress-header">
+                  <div className="progress-label">Progress</div>
+                  <div className="progress-value-outside">
+                    {selectedItem.progress}%
+                  </div>
+                </div>
+                <div className="progress-bar-container">
+                  <div
+                    className="progress-bar-fill"
+                    style={{ width: `${selectedItem.progress}%` }}
+                  ></div>
+                </div>
+              </div>
+              {selectedItem.description && (
+                <div className="description-section">
+                  <h3>Description</h3>
+                  <p>{selectedItem.description}</p>
+                </div>
+              )}
+
+              {selectedItem.relations && selectedItem.relations.length > 0 && (
+                <div className="relations-section">
+                  <h3>Dependencies</h3>
+                  <ul className="relations-list">
+                    {selectedItem.relations.map((relation, index) => (
+                      <li key={index} className="relation-item">
+                        <div className="relation-arrow">→</div>
+                        <div className="relation-name">{relation.targetId}</div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {selectedItem.links && selectedItem.links.length > 0 && (
+                <div className="links-section">
+                  <h3>Related Links</h3>
+                  <ul className="links-list">
+                    {selectedItem.links.map((link, index) => (
+                      <li key={index} className="link-item">
+                        <a
+                          href={link.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="link"
+                        >
+                          {link.label || link.url}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </>
+          ) : (
+            // Default content when no item is selected
+            <div className="no-selection-message">
+              <svg
+                width="64"
+                height="64"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="#94a3b8"
+                  strokeWidth="2"
+                />
+                <path
+                  d="M12 8L12 8.01"
+                  stroke="#94a3b8"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+                <line
+                  x1="12"
+                  y1="12"
+                  x2="12"
+                  y2="16"
+                  stroke="#94a3b8"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
+              <p>Click on any item in the roadmap to view its details</p>
+            </div>
+          )}
+        </div>
+      </aside>
+    );
+  };
+  return (
+    <div className="app">
+      {/* Top toolbar with the dropdown */}
+      <div className="app-header">
+        <div className="dropdown">
+          <button
+            className="dropdown-button"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <div className="button-content">
+              <span>{selected}</span>
+              <svg
+                className={`chevron ${isOpen ? "rotate" : ""}`}
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  d="M6 8l4 4 4-4"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </div>
+          </button>
+
+          {isOpen && (
+            <div className="dropdown-menu">
+              {options.map((option) => (
+                <button
+                  key={option}
+                  className={`menu-item ${option === selected ? "active" : ""}`}
+                  onClick={() => {
+                    setSelected(option);
+                    setIsOpen(false);
+                  }}
+                >
+                  {option}
+                </button>
+              ))}
             </div>
           )}
         </div>
       </div>
-    );
-  };
 
-  return (
-    <div className="app">
-      <div className="dropdown">
-        <button className="dropdown-button" onClick={() => setIsOpen(!isOpen)}>
-          <div className="button-content">
-            <span>{selected}</span>
-            <svg
-              className={`chevron ${isOpen ? "rotate" : ""}`}
-              width="20"
-              height="20"
-              viewBox="0 0 20 20"
-            >
-              <path
-                d="M6 8l4 4 4-4"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            </svg>
-          </div>
-        </button>
-
-        {isOpen && (
-          <div className="dropdown-menu">
-            {options.map((option) => (
-              <button
-                key={option}
-                className={`menu-item ${option === selected ? "active" : ""}`}
-                onClick={() => {
-                  setSelected(option);
-                  setIsOpen(false);
-                }}
-              >
-                {option}
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-
-      <ArcherContainer strokeColor="#94a3b8">
-        {selected === "Full roadmap" ? (
-          <div className="full-roadmap">
-            {gridItems[selected].rows.map((row, rowIndex) => (
-              <div key={rowIndex} className="roadmap-row">
-                <div className="row-header">
-                  <h2 className="row-title">{row.title}</h2>
-                </div>
-                <div
-                  className={`grid ${row.title === "Developer Experience" ? "four-columns" : ""}`}
-                >
-                  {row.columns.map((column, columnIndex) => (
-                    <div key={columnIndex} className="column">
-                      {column.map((item, itemIndex) => (
-                        <div key={itemIndex}>
-                          {renderBox(item, item.relations || [])}
+      <div className="main-layout">
+        <div className="content-area scrollable-content" ref={contentRef}>
+          <ArcherContainer strokeColor="#94a3b8" ref={archerContainerRef}>
+            {selected === "Full roadmap" ? (
+              <div className="full-roadmap">
+                {gridItems[selected].rows.map((row, rowIndex) => (
+                  <div key={rowIndex} className="roadmap-row">
+                    <div className="row-header">
+                      <h2 className="row-title">{row.title}</h2>
+                    </div>
+                    <div
+                      className={`grid ${row.title === "Developer Experience" ? "four-columns" : ""}`}
+                    >
+                      {row.columns.map((column, columnIndex) => (
+                        <div key={columnIndex} className="column">
+                          {column.map((item, itemIndex) => (
+                            <div key={itemIndex}>
+                              {renderBox(item, item.relations || [])}
+                            </div>
+                          ))}
                         </div>
                       ))}
                     </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div
-            className={`grid ${selected === "Developer experience" ? "three-columns" : ""}`}
-          >
-            {gridItems[selected].columns.map((column, columnIndex) => (
-              <div key={columnIndex} className="column">
-                {column.map((item, itemIndex) => (
-                  <div key={itemIndex}>
-                    {renderBox(item, item.relations || [])}
                   </div>
                 ))}
               </div>
-            ))}
-          </div>
-        )}
-      </ArcherContainer>
-
-      {renderPopup()}
+            ) : (
+              <div
+                className={`grid ${selected === "Developer experience" ? "three-columns" : ""}`}
+              >
+                {gridItems[selected].columns.map((column, columnIndex) => (
+                  <div key={columnIndex} className="column">
+                    {column.map((item, itemIndex) => (
+                      <div key={itemIndex}>
+                        {renderBox(item, item.relations || [])}
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            )}
+          </ArcherContainer>
+        </div>
+        {renderSidebar()}
+      </div>
     </div>
   );
 }
