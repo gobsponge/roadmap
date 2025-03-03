@@ -11,7 +11,9 @@ function App() {
     item: null,
     position: { x: 0, y: 0 },
   });
+  const [zoomLevel, setZoomLevel] = useState(1);
   const popupRef = useRef(null);
+  const contentRef = useRef(null);
 
   const options = [
     "User experience",
@@ -20,6 +22,18 @@ function App() {
     "ZK L2",
     "Full roadmap",
   ];
+
+  const zoomIn = () => {
+    setZoomLevel((prevZoom) => Math.min(prevZoom + 0.1, 2.0));
+  };
+
+  const zoomOut = () => {
+    setZoomLevel((prevZoom) => Math.max(prevZoom - 0.1, 0.5));
+  };
+
+  const resetZoom = () => {
+    setZoomLevel(1);
+  };
 
   const calculateAverageProgress = (items) => {
     if (!items.length) return 0;
@@ -985,16 +999,147 @@ function App() {
                       arrowThickness: 2,
                     },
                   },
+                  {
+                    targetId: "Efficient ECDSA signatures",
+                    targetAnchor: "left",
+                    sourceAnchor: "right",
+                    style: {
+                      strokeColor: "#94a3b8",
+                      strokeWidth: 2,
+                      arrowLength: 8,
+                      arrowThickness: 2,
+                    },
+                  },
                 ],
               },
             ],
-            [{ name: "Batch kernel", progress: 55 }],
             [
-              { name: "Parallel state updates", progress: 40 },
-              { name: "Distributed provers", progress: 70 },
-              { name: "CUDA accleration", progress: 90 },
-              { name: "Block kernel", progress: 50 },
-              { name: "Efficient Keccak", progress: 20 },
+              {
+                name: "Batch kernel",
+                progress: 55,
+                relations: [
+                  {
+                    targetId: "Block kernel",
+                    targetAnchor: "left",
+                    sourceAnchor: "right",
+                    style: {
+                      strokeColor: "#94a3b8",
+                      strokeWidth: 2,
+                      arrowLength: 8,
+                      arrowThickness: 2,
+                    },
+                  },
+                ],
+              },
+            ],
+            [
+              {
+                name: "Parallel state updates",
+                progress: 40,
+                relations: [
+                  {
+                    targetId: "Node performance",
+                    targetAnchor: "left",
+                    sourceAnchor: "right",
+                    style: {
+                      strokeColor: "#94a3b8",
+                      strokeWidth: 2,
+                      arrowLength: 8,
+                      arrowThickness: 2,
+                    },
+                  },
+                ],
+              },
+              {
+                name: "Distributed provers",
+                progress: 70,
+                relations: [
+                  {
+                    targetId: "Node performance",
+                    targetAnchor: "left",
+                    sourceAnchor: "right",
+                    style: {
+                      strokeColor: "#94a3b8",
+                      strokeWidth: 2,
+                      arrowLength: 8,
+                      arrowThickness: 2,
+                    },
+                  },
+                  {
+                    targetId: "Execution proofs",
+                    targetAnchor: "left",
+                    sourceAnchor: "right",
+                    style: {
+                      strokeColor: "#94a3b8",
+                      strokeWidth: 2,
+                      arrowLength: 8,
+                      arrowThickness: 2,
+                    },
+                  },
+                ],
+              },
+              {
+                name: "CUDA accleration",
+                progress: 90,
+                relations: [
+                  {
+                    targetId: "Execution proofs",
+                    targetAnchor: "left",
+                    sourceAnchor: "right",
+                    style: {
+                      strokeColor: "#94a3b8",
+                      strokeWidth: 2,
+                      arrowLength: 8,
+                      arrowThickness: 2,
+                    },
+                  },
+                ],
+              },
+              {
+                name: "Block kernel",
+                progress: 50,
+                relations: [
+                  {
+                    targetId: "Execution proofs",
+                    targetAnchor: "left",
+                    sourceAnchor: "right",
+                    style: {
+                      strokeColor: "#94a3b8",
+                      strokeWidth: 2,
+                      arrowLength: 8,
+                      arrowThickness: 2,
+                    },
+                  },
+                ],
+              },
+              {
+                name: "Efficient Keccak",
+                progress: 20,
+                relations: [
+                  {
+                    targetId: "AggLayer integration",
+                    targetAnchor: "left",
+                    sourceAnchor: "right",
+                    style: {
+                      strokeColor: "#94a3b8",
+                      strokeWidth: 2,
+                      arrowLength: 8,
+                      arrowThickness: 2,
+                    },
+                  },
+                  {
+                    targetId: "LxLy-bridge/DA",
+                    targetAnchor: "left",
+                    sourceAnchor: "right",
+                    style: {
+                      strokeColor: "#94a3b8",
+                      strokeWidth: 2,
+                      arrowLength: 8,
+                      arrowThickness: 2,
+                    },
+                  },
+                ],
+              },
             ],
             [
               { name: "Node performance", progress: 0 },
