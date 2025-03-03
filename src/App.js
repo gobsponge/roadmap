@@ -5,7 +5,6 @@ import "./App.css";
 function App() {
   const [selected, setSelected] = useState("User experience");
   const [isOpen, setIsOpen] = useState(false);
-  // Default sidebar to have no item selected initially
   const [selectedItem, setSelectedItem] = useState(null);
   const [connectedBoxes, setConnectedBoxes] = useState([]);
 
@@ -25,39 +24,30 @@ function App() {
 
     const connected = new Set();
 
-    // Helper function to search through all sections and columns
     const searchConnections = () => {
-      // Check all sections
       Object.values(gridItems).forEach((section) => {
-        // For regular views with columns
         if (section.columns) {
           section.columns.forEach((column) => {
             column.forEach((item) => {
-              // Check if this item targets our selected box
               if (item.relations) {
                 item.relations.forEach((relation) => {
                   if (relation.targetId === itemName) {
-                    connected.add(item.name); // This item targets our selected box
+                    connected.add(item.name);
                   }
                 });
               }
-
-              // Check if our selected box has this item as a target
               if (item.name === itemName && item.relations) {
                 item.relations.forEach((relation) => {
-                  connected.add(relation.targetId); // Our selected box targets this item
+                  connected.add(relation.targetId);
                 });
               }
             });
           });
         }
-
-        // For Full roadmap with rows
         if (section.rows) {
           section.rows.forEach((row) => {
             row.columns.forEach((column) => {
               column.forEach((item) => {
-                // Check if this item targets our selected box
                 if (item.relations) {
                   item.relations.forEach((relation) => {
                     if (relation.targetId === itemName) {
@@ -66,7 +56,6 @@ function App() {
                   });
                 }
 
-                // Check if our selected box has this item as a target
                 if (item.name === itemName && item.relations) {
                   item.relations.forEach((relation) => {
                     connected.add(relation.targetId);
@@ -1337,7 +1326,6 @@ function App() {
 
         <div className="sidebar-content">
           {selectedItem ? (
-            // Content when an item is selected
             <>
               <div className="progress-indicator">
                 <div className="progress-header">
@@ -1395,7 +1383,6 @@ function App() {
               )}
             </>
           ) : (
-            // Default content when no item is selected
             <div className="no-selection-message">
               <svg
                 width="64"
@@ -1436,7 +1423,6 @@ function App() {
   };
   return (
     <div className="app">
-      {/* Top toolbar with the dropdown */}
       <div className="app-header">
         <div className="dropdown">
           <button

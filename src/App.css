@@ -39,8 +39,6 @@ body {
     flex: 1;
     overflow: hidden;
 }
-
-/* Content area styles */
 .content-area {
     flex: 1;
     padding: 1.5rem;
@@ -135,7 +133,7 @@ body {
 .button-content span {
     flex: 1;
     text-align: left;
-    padding-right: 28px; /* Creates space for chevron */
+    padding-right: 28px;
 }
 
 .dropdown-button:hover {
@@ -347,7 +345,6 @@ body {
         border-color 0.3s ease;
 }
 
-/* Popup Styles */
 .popup {
     width: 300px;
     background-color: white;
@@ -599,7 +596,6 @@ body {
     text-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
 }
 
-/* Section styles */
 .description-section,
 .relations-section,
 .links-section {
@@ -628,7 +624,6 @@ body {
     color: #334155;
 }
 
-/* Relations list */
 .relations-list,
 .links-list {
     list-style: none;
@@ -658,7 +653,6 @@ body {
     font-weight: 500;
 }
 
-/* Links styling */
 .link-item {
     margin-bottom: 8px;
 }
@@ -692,7 +686,6 @@ body {
     background-repeat: no-repeat;
 }
 
-/* Responsive adjustments */
 @media (max-width: 960px) {
     .main-layout {
         flex-direction: column;
